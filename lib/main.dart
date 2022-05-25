@@ -41,7 +41,7 @@ class DemoAppState extends State<DemoApp> {
                 children: <Widget>[
 
                   TextField(controller: textdata,
-                    decoration: InputDecoration(
+                    decoration:const  InputDecoration(
                         border: OutlineInputBorder(),
                         label: Text("ENTER TEST NAME")
                     ),
@@ -67,7 +67,7 @@ class DemoAppState extends State<DemoApp> {
                     final path = '${temp.path}/image.jpg';
                     File(path).writeAsBytesSync(bytes);
                     await Share.shareFiles([path]);
-                  }, child: Text("Share image ")),
+                  }, child: const Text("Share image ")),
                   TextField(
                     decoration: const InputDecoration(
                       labelText: 'Name',
@@ -107,7 +107,6 @@ class DemoAppState extends State<DemoApp> {
                       }
                     },
                   ),
-
                   Padding(padding: EdgeInsets.only(top: 12.0)),
                   Builder(
                     builder: (BuildContext context) {
@@ -132,30 +131,27 @@ class DemoAppState extends State<DemoApp> {
                         source: ImageSource.gallery);
                     if (image == null) return;
                     await Share.shareFiles([image.path]);
-                  }, child: Text("Share Image from Camera ")),
+                  }, child: Text("Share Image from Gallery ")),
                   //To pick video from camera
                   ElevatedButton(onPressed: () async {
                     final image = await ImagePicker().pickVideo(
                         source: ImageSource.camera);
                     if (image == null) return;
                     await Share.shareFiles([image.path]);
-                  }, child: Text("Share Image from Camera ")),
+                  }, child: Text("Share Video ")),
                   //To pick video from gallery
                   ElevatedButton(onPressed: () async {
                     final image = await ImagePicker().pickVideo(
                         source: ImageSource.gallery);
                     if (image == null) return;
                     await Share.shareFiles([image.path]);
-                  }, child: Text("Share Image from Camera ")),
+                  }, child: Text("Share Video from Gallery ")),
                   //To pick file from mobile
-                  ElevatedButton(onPressed: ()  {
-                    // final result = await FilePicker.platform.pickFiles();
-                    // List<String> files = result?.files.map((e)) =>
-                    // e.path;).cast<String>().toList();
-                    // if(files ==null)return ;
-                    // await Share.shareFiles(files);
-
-                  }, child: Text("Share File  ")),
+                  ElevatedButton(onPressed: ()  async{
+                    final result = await FilePicker.platform.pickFiles();
+                    List<String>? files =result?.files.map((e) => e.path).cast<String>().toList();
+                    if(files==null)return ;
+                    await Share.shareFiles(files);}, child:const  Text("Pick and Share File")),
                   const Padding(padding: EdgeInsets.only(top: 12.0)),
                   Builder(
                     builder: (BuildContext context) {
@@ -175,6 +171,8 @@ class DemoAppState extends State<DemoApp> {
           )),
     );
   }
+
+
 
   void _onDeleteImage(int position) {
     setState(() {
@@ -203,7 +201,6 @@ class DemoAppState extends State<DemoApp> {
       result = await Share.shareFilesWithResult(imagePaths,
           text: text,
           subject: subject,
-
           sharePositionOrigin: box!.localToGlobal(Offset.zero) & box.size);
     } else {
       result = await Share.shareWithResult(text,
